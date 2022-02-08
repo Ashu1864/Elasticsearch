@@ -1,9 +1,9 @@
 import simplejson as json
 from elasticsearch import Elasticsearch
 
-res = requests.get('http://localhost:9200')
+res = requests.get('http://192.168.1.17:9200')
 print (res.content)
-es = Elasticsearch([{'host': 'localhost', 'port': '9200'}])
+es = Elasticsearch([{'host': '192.168.1.17', 'port': '9200'}])
 i = 1
 for filename in os.listdir(directory):
     if filename.endswith(".json"):
