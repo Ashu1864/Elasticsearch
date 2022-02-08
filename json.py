@@ -1,7 +1,7 @@
 import requests, json, os
 from elasticsearch import Elasticsearch
 
-directory = 'csvjson.json'
+directory = '/media/ashu/New Volume1/Elasticsearch-main/'
 res = requests.get('http://192.168.1.17:9200')
 print (res.content)
 es = Elasticsearch([{'host': '192.168.1.17', 'port': '9200'}])
