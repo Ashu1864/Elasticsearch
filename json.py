@@ -1,4 +1,4 @@
-import simplejson as json
+import requests, json, os
 from elasticsearch import Elasticsearch
 
 res = requests.get('http://192.168.1.17:9200')
