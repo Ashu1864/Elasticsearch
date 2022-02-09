@@ -14,3 +14,5 @@ for filename in os.listdir(directory):
         es.index(index='cveindex', ignore=400, doc_type='docket', 
         cveid=i, body=json.loads(docket_content))
         i = i + 1
+data = es.get(index="cveindex", doc_type='docket', id=4)
+print(data)
