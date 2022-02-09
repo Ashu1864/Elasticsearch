@@ -12,5 +12,5 @@ for filename in os.listdir(directory):
         docket_content = f.read()
         # Send the data into es
         es.index(index='cveindex', ignore=400, doc_type='docket', 
-        id=i, body=json.loads(docket_content))
+        cveid=i, body=json.loads(docket_content))
         i = i + 1
