@@ -1,34 +1,25 @@
-import requests, json, os
+from xml.dom.minidom import Document
+import requests, os
+import simplejson as json
 from elasticsearch import Elasticsearch
-
-directory = '/home/ashu/Documents/elasticsearch/Elasticsearch/'
+filename = '/home/ashu/Documents/elasticsearch/Elasticsearch/csvjson.json'
 res = requests.get('http://192.168.1.17:9200')
 print (res.content)
 es = Elasticsearch([{'host': '192.168.1.17', 'port': '9200'}])
-check=es.indices.exists(index="cveindex")
-print (check)
-if check is True :
-    i = 1
-    for filename in os.listdir(directory):
-        if filename.endswith(".json"):
-            f = open(filename)
-            docket_content = f.read()
-            # Send the data into es
-            es.index(index='cveindex', ignore=400, doc_type='docket', 
-            id=i, body=json.loads(docket_content))
-            i = i + 1
-    data = es.get(index="cveindex", doc_type='docket', id=4)
-    print(data)
-else :
+es.indices.create(index="cveindex",ignore=[400,404])
+if es.indices.exists(index="cveindex") is False: 
     es.indices.create(index="cveindex" , ignore=400)
-    i = 1
-    for filename in os.listdir(directory):
-        if filename.endswith(".json"):
-            f = open(filename)
-            docket_content = f.read()
-            # Send the data into es
-            es.index(index='cveindex', ignore=400, doc_type='docket',
-            id=i, body=json.loads(docket_content))
-            i = i + 1
-    data = es.get(index="cveindex", doc_type='docket', id=4)
-    print(data)
+f = open(filename,'r')
+data= json.load(f)
+j=1
+ed={}
+for attr,value in data.items(): 
+    ed[j] = {attr: value}
+    j +=1
+    # Send the data into es
+doc=data
+es.index(index='cveindex', ignore=400, doc_type='document', id=j, document=doc)     
+data = es.search(index="cveindex",query={"match":{'cveid': 'CVE-2020-18442'}})
+ds = es.search(index="cveindex", ignore=400 ,query={"match":{"cveid":"CVE-2020*"}})
+all = es.search(index="cveindex", ignore=400 ,query={"match_all":{}})
+print (data)
